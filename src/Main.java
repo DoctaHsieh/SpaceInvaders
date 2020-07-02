@@ -91,7 +91,8 @@ public class Main extends Application {
         player = new Rocket(WIDTH / 2, HEIGHT - PLAYER_SIZE, PLAYER_SIZE, PLAYER_IMG);
         score = 0;
         System.out.println("INtStream.range: " + MAX_BOMBS);
-        IntStream.range(0, MAX_BOMBS).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
+        IntStream.range(0,3).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
+
     }
 
     //run Graphics
@@ -102,6 +103,11 @@ public class Main extends Application {
         gc.setFont(Font.font(20));
         gc.setFill(Color.WHITE);
         gc.fillText("Score: " + score, 60,  20);
+        if (score >= 5){
+            MAX_BOMBS = score/5;
+            System.out.println(MAX_BOMBS);
+            IntStream.range(0,1).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
+        }
 
 
         if(gameOver) {
@@ -157,6 +163,7 @@ public class Main extends Application {
                 univ.remove(i);
 
         }
+
     }
 
     //player
