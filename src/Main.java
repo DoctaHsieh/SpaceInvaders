@@ -48,7 +48,7 @@ public class Main extends Application {
             new Image("/10.png"),
     };
 
-    int MAX_BOMBS,  MAX_SHOTS, StartingBombs;
+    int MAX_SHOTS, StartingBombs;
     float Stage;
     boolean gameOver = false, easy = false, normal = false, hard = false;
     private GraphicsContext gc;
@@ -91,19 +91,16 @@ public class Main extends Application {
         shots = new ArrayList<>() ;
         Bombs = new ArrayList<>();
         StartingBombs = 3;
-        MAX_BOMBS = score / 5;
         MAX_SHOTS = StartingBombs * 3;
         player = new Rocket(WIDTH / 2, HEIGHT - PLAYER_SIZE, PLAYER_SIZE, PLAYER_IMG);
         score = 0;
         toAddBomb_score = 0;
-        System.out.println("INtStream.range: " + MAX_BOMBS);
-        IntStream.range(0,3).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
+        IntStream.range(0,StartingBombs).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
 
     }
 
     //run Graphics
     private void run(GraphicsContext gc) {
-        MAX_BOMBS = score / 5;
         gc.setFill(Color.grayRgb(20));
         gc.fillRect(0, 0, WIDTH, HEIGHT);
         gc.setTextAlign(TextAlignment.CENTER);
@@ -111,15 +108,8 @@ public class Main extends Application {
         gc.setFill(Color.WHITE);
         gc.fillText("Score: " + score, 60,  20);
         Stage = score/5;
-        MAX_BOMBS = score / 5;
         if (score >= 5) {
             System.out.println("Stage = " +Stage);
-            /*
-            if (MAX_BOMBS <= Stage ) {
-                IntStream.range(0, 1).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
-                System.out.println("in Main.run() Bombs.size() = " + Bombs.size());
-            }
-            */
         }
 
 
