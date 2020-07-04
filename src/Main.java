@@ -46,7 +46,8 @@ public class Main extends Application {
             new Image("/10.png"),
     };
 
-    int MAX_BOMBS,  MAX_SHOTS ;
+    int MAX_BOMBS,  MAX_SHOTS, StartingBombs;
+    float Stage;
     boolean gameOver = false, easy = false, normal = false, hard = false;
     private GraphicsContext gc;
 
@@ -86,8 +87,9 @@ public class Main extends Application {
         univ = new ArrayList<>();
         shots = new ArrayList<>() ;
         Bombs = new ArrayList<>();
-        MAX_BOMBS = 3;
-        MAX_SHOTS = MAX_BOMBS * 3;
+        StartingBombs = 3;
+        MAX_BOMBS = score / 5;
+        MAX_SHOTS = StartingBombs * 3;
         player = new Rocket(WIDTH / 2, HEIGHT - PLAYER_SIZE, PLAYER_SIZE, PLAYER_IMG);
         score = 0;
         System.out.println("INtStream.range: " + MAX_BOMBS);
@@ -96,17 +98,21 @@ public class Main extends Application {
     }
 
     //run Graphics
-    private void run(GraphicsContext gc) {
+    private void run(GraphicsContext gc) {MAX_BOMBS = score / 5;
         gc.setFill(Color.grayRgb(20));
         gc.fillRect(0, 0, WIDTH, HEIGHT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setFont(Font.font(20));
         gc.setFill(Color.WHITE);
         gc.fillText("Score: " + score, 60,  20);
-        if (score >= 5){
-            MAX_BOMBS = score/5;
-            System.out.println(MAX_BOMBS);
-            IntStream.range(0,1).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
+        Stage = score/5;
+        MAX_BOMBS = score / 5;
+        if (score >= 5) {
+            System.out.println("Stage = " +Stage);
+            if (MAX_BOMBS <= Stage ) {
+                System.out.println(MAX_BOMBS);
+                IntStream.range(0, 1).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
+            }
         }
 
 
@@ -147,6 +153,7 @@ public class Main extends Application {
 
         }
 
+        System.out.println("BombSize = " +Bombs.size());
         for (int i = Bombs.size() - 1; i >= 0; i--){
             if(Bombs.get(i).destroyed)  {
                 Bombs.set(i, newBomb());
@@ -158,6 +165,7 @@ public class Main extends Application {
         if(RAND.nextInt(10) > 2) {
             univ.add(new Universe());
         }
+
         for (int i = 0; i < univ.size(); i++) {
             if(univ.get(i).posY > HEIGHT)
                 univ.remove(i);
@@ -310,3 +318,78 @@ public class Main extends Application {
         launch();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
