@@ -25,6 +25,7 @@ public class Main extends Application {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final int PLAYER_SIZE = 60;
+
     static final Image PLAYER_IMG = new Image("/player.png");
     static final Image EXPLOSION_IMG = new Image("/explosion.png");
     static final int EXPLOSION_W = 128;
@@ -32,6 +33,7 @@ public class Main extends Application {
     static final int EXPLOSION_COL = 3;
     static final int EXPLOSION_H = 128;
     static final int EXPLOSION_STEPS = 15;
+    static final int SCALE_ADD_BOMB = 5;
 
     static final Image BOMBS_IMG[] = {
             new Image("/1.png"),
@@ -46,7 +48,7 @@ public class Main extends Application {
             new Image("/10.png"),
     };
 
-    int MAX_BOMBS,  MAX_SHOTS, StartingBombs;
+    int MAX_SHOTS, StartingBombs;
     float Stage;
     boolean gameOver = false, easy = false, normal = false, hard = false;
     private GraphicsContext gc;
@@ -58,6 +60,7 @@ public class Main extends Application {
 
     private double mouseX;
     private int score;
+    private int toAddBomb_score;
 
     //start
     public void start(Stage stage) throws Exception {
@@ -88,17 +91,16 @@ public class Main extends Application {
         shots = new ArrayList<>() ;
         Bombs = new ArrayList<>();
         StartingBombs = 3;
-        MAX_BOMBS = score / 5;
         MAX_SHOTS = StartingBombs * 3;
         player = new Rocket(WIDTH / 2, HEIGHT - PLAYER_SIZE, PLAYER_SIZE, PLAYER_IMG);
         score = 0;
-        System.out.println("INtStream.range: " + MAX_BOMBS);
-        IntStream.range(0,3).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
+        toAddBomb_score = 0;
+        IntStream.range(0,StartingBombs).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
 
     }
 
     //run Graphics
-    private void run(GraphicsContext gc) {MAX_BOMBS = score / 5;
+    private void run(GraphicsContext gc) {
         gc.setFill(Color.grayRgb(20));
         gc.fillRect(0, 0, WIDTH, HEIGHT);
         gc.setTextAlign(TextAlignment.CENTER);
@@ -106,13 +108,8 @@ public class Main extends Application {
         gc.setFill(Color.WHITE);
         gc.fillText("Score: " + score, 60,  20);
         Stage = score/5;
-        MAX_BOMBS = score / 5;
         if (score >= 5) {
             System.out.println("Stage = " +Stage);
-            if (MAX_BOMBS <= Stage ) {
-                System.out.println(MAX_BOMBS);
-                IntStream.range(0, 1).mapToObj(i -> this.newBomb()).forEach(Bombs::add);
-            }
         }
 
 
@@ -143,14 +140,23 @@ public class Main extends Application {
             }
             shot.update();
             shot.draw();
+
             for (Bomb bomb : Bombs) {
                 if(shot.collide(bomb) && !bomb.exploding) {
                     score++;
+                    toAddBomb_score ++;
                     bomb.explode();
                     shot.toRemove = true;
                 }
             }
 
+            if (toAddBomb_score > SCALE_ADD_BOMB){
+                int howMany = (int) Math.ceil(toAddBomb_score/SCALE_ADD_BOMB);
+                for (int add = 0; add < howMany; add++){
+                    Bombs.add(this.newBomb());
+                }
+                toAddBomb_score = 0;
+            }
         }
 
         System.out.println("BombSize = " +Bombs.size());
