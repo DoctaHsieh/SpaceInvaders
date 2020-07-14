@@ -33,7 +33,7 @@ public class Main extends Application {
     static final int EXPLOSION_COL = 3;
     static final int EXPLOSION_H = 128;
     static final int EXPLOSION_STEPS = 15;
-    static final int SCALE_ADD_BOMB = 5;
+    static final int SCALE_ADD_BOMB = 10;
 
     static final Image BOMBS_IMG[] = {
             new Image("/1.png"),
@@ -108,9 +108,6 @@ public class Main extends Application {
         gc.setFill(Color.WHITE);
         gc.fillText("Score: " + score, 60,  20);
         Stage = score/5;
-        if (score >= 5) {
-            System.out.println("Stage = " +Stage);
-        }
 
 
         if(gameOver) {
@@ -240,7 +237,10 @@ public class Main extends Application {
         public void update() {
             super.update();
             if(!exploding && !destroyed) posY += SPEED;
-            if(posY > HEIGHT) destroyed = true;
+            if(posY > HEIGHT) {
+                destroyed = true;
+                score--;
+            }
         }
     }
 
@@ -264,7 +264,7 @@ public class Main extends Application {
 
         public void draw() {
             gc.setFill(Color.RED);
-            if (score >=50 && score<=70 || score>=120) {
+            if (score >=25 && score<=30 || score>=60 && score <= 70 || score >= 100) {
                 gc.setFill(Color.YELLOWGREEN);
                 speed = 50;
                 gc.fillRect(posX-5, posY-10, size+10, size+30);
